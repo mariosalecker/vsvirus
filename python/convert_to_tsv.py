@@ -1,7 +1,7 @@
 import csv
 import glob
 
-​import pandas as pd
+import pandas as pd
 from pytesseract import Output
 from tqdm import tqdm
 from pdf2image import convert_from_path, convert_from_bytes
@@ -10,20 +10,19 @@ from wand.color import Color
 from wand.display import display
 from loguru import logger
 
-maindir="./data/tax_ch"
+maindir="./pdfs"
 
-files=glob.glob(maindir+"/**/*.pdf")
+files=glob.glob(maindir+"/*.pdf")
 
 from wand.image import Image as wi
 from wand.color import Color
 from pathlib import Path
 
 import pytesseract
+import sys
 import os
 
-path = '/anaconda3/envs/py36/bin/'
-
-os.environ['PATH'] += ':'+path
+os.environ["TESSDATA_PREFIX"] = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), "tessdata")
 
 def convert_pdf(filename, output_dir=None, resolution=200):
     name=str(Path(filename).stem)
@@ -50,7 +49,7 @@ def convert_pdf(filename, output_dir=None, resolution=200):
         f.write("\n".join(outfiles))
 
     # apply OCR on images and get the tsv data
-    data=pytesseract.image_to_data(outtxt, lang=None, config='', nice=0, output_type=Output.STRING)
+    data=pytesseract.image_to_data(outtxt, lang='deu', config='', nice=0, output_type=Output.STRING)
     out_tsv = os.path.join(output_dir, "document.tsv")
     with open(out_tsv,"w",encoding="utf8") as f:
         f.write(data)
@@ -73,8 +72,3 @@ for file in tqdm(files):
     logger.info("Converting {}".format(file))
     convert_pdf(file)
 
-​
-
-    #df[df.apply(lambda x: x['b'] > x['c'], axis=1)]
-
-​
