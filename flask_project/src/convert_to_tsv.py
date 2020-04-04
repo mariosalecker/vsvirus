@@ -1,3 +1,4 @@
+from app import app
 import pytesseract
 import sys
 import os
@@ -18,11 +19,8 @@ class Converter():
 
     def __init__(self):
         self.files = self.get_files_from_data_dir()
-        self.output_root = './results'
+        self.output_root = app.config['UPLOAD_FOLDER']
         self.resolution = 200
-        for filename in tqdm(self.files):
-            logger.info('Converting {}'.format(filename))
-            self.convert_pdf(filename)
 
     def get_files_from_data_dir(self):
         return glob.glob('./data/*.pdf')
@@ -41,6 +39,8 @@ class Converter():
         result_tsv_path = self.create_tsv_results(result_dir_path, page_list_file_path)
 
         self.create_full_text_result(result_dir_path, result_tsv_path)
+
+        return result_tsv_path
 
     def create_result_dir(self, filename):
         result_dir_path = os.path.join(self.output_root, Path(filename).stem)
@@ -70,7 +70,8 @@ class Converter():
         return result_tsv_path
 
     def create_images(self, filename, result_dir_path):
-        images = convert_from_path(filename, dpi=self.resolution)
+        file_path = os.path.join(result_dir_path, filename)
+        images = convert_from_path(file_path, dpi=self.resolution)
 
         result_file_paths=[]
         for index, image in enumerate(images):
@@ -93,6 +94,3 @@ class Converter():
         out_txt = os.path.join(result_dir_path, 'document.txt')
         with open(out_txt, 'w', encoding='utf8') as f:
             f.write(full_text)
-
-Converter()
-

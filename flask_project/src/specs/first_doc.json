@@ -1,0 +1,21 @@
+{
+   "text":"compliance04_p-00",
+   "width":1653,
+   "height":2338,
+   "fields":[
+      {
+         "label":"Address",
+         "left": 93,
+         "top": 304,
+         "width": 582,
+         "height": 118
+      },
+      {
+         "label":"Test",
+         "left": 220,
+         "top": 540,
+         "width": 200,
+         "height": 120
+      }
+   ]
+}
