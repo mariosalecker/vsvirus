@@ -29,8 +29,9 @@ class Converter():
 
         result_dir_path = self.create_result_dir(filename)
 
-        if self.results_already_existing(result_dir_path):
-            return
+        result_file = self.get_result_file(result_dir_path)
+        if result_file:
+            return result_file
 
         result_file_paths = self.create_images(filename, result_dir_path)
 
@@ -47,12 +48,12 @@ class Converter():
         os.makedirs(result_dir_path, exist_ok=True)
         return result_dir_path
 
-    def results_already_existing(self, result_dir):
-        out_txt = os.path.join(result_dir, 'document.txt')
-        if os.path.isfile(out_txt):
+    def get_result_file(self, result_dir):
+        result_file = os.path.join(result_dir, 'document.tsv')
+        if os.path.isfile(result_file):
             logger.info('Skipping, already converted {}'.format(result_dir))
-            return True
-        return False
+            return result_file
+        return None
 
     def create_page_list_file(self, result_dir, result_file_paths):
         # create list of page paths in a text file, which can be used by tesseract
