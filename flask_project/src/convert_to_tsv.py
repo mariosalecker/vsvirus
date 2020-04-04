@@ -10,15 +10,15 @@ from pdf2image import convert_from_path
 from pytesseract import Output
 from wand.image import Image
 
-
-os.environ['TESSDATA_PREFIX'] = os.path.join(app.app.root_path, 'tessdata')
+from app import app
+os.environ['TESSDATA_PREFIX'] = os.path.join("./", 'tessdata')
 
 
 class Converter:
 
     def __init__(self):
         self.files = self.get_files_from_data_dir()
-        self.output_root = app.app.config['UPLOAD_FOLDER']
+        self.output_root = app.config['UPLOAD_FOLDER']
         self.resolution = 200
 
     def get_files_from_data_dir(self):

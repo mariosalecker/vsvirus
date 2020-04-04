@@ -8,8 +8,6 @@ import pandas as pd
 from loguru import logger
 
 import app
-
-
 class LabelMapper:
 
     def __init__(self):
