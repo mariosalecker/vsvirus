@@ -1,10 +1,9 @@
-import re
+from PyPDF2 import PdfFileWriter,PdfFileReader,PdfFileMerger
 import collections
 import csv
-import os
+from loguru import logger
 import json
 import os
-import re
 
 import pandas as pd
 
@@ -18,7 +17,7 @@ class LabelMapper:
         self.Rectangle = collections.namedtuple("Rectangle", "left top width height")
         self.Field = collections.namedtuple("Field", "filename page_num page_width page_height label rectangle")
 
-        self.fields = self.extract_field_information()
+        self.fields, self.signature_field = self.extract_field_information()
 
 
     def extract_for_all_docs(self):
@@ -34,19 +33,18 @@ class LabelMapper:
 
         return extracted_data
 
-    def extract_and_write_result_for_document(self, document):
-        logger.info('Extracing document: {}'.format(document))
-        df = pd.read_csv(document, sep='\t', error_bad_lines=False, quoting=csv.QUOTE_NONE, escapechar=None,
+    def extract_and_write_result_for_document(self, pdf_filename, tsv_document):
+        logger.info('Extracing document: {}'.format(tsv_document))
+        df = pd.read_csv(tsv_document, sep='\t', error_bad_lines=False, quoting=csv.QUOTE_NONE, escapechar=None,
                          na_values='', encoding='utf-8')
         df = df.fillna('')
 
         doc_width = df.iloc[[0]].width.values[0]
         doc_height = df.iloc[[0]].height.values[0]
 
-        scaled_fields = self.scale(doc_width, doc_height)
+        scaled_fields = self.scale_annotations(doc_width, doc_height)
 
-
-        extract = {'filename': document}
+        extract = {'filename': tsv_document}
         for field in scaled_fields:
             words = []
             logger.info('Key: {}, {}'.format(field.label, field))
@@ -65,19 +63,46 @@ class LabelMapper:
             extract[field.label] = ' '.join(words)
             logger.info('Label: {}, {}'.format(field.label, extract[field.label]))
 
+
+        signature_file_path = self.extract_and_save_signature(pdf_filename);
         self.write_results([extract])
-        return extract
+        return extract, signature_file_path
+
+    def extract_and_save_signature(self, pdf_file_path):
+
+        with open(pdf_file_path, 'rb') as fin:
+            pdf = PdfFileReader(fin)
+            page = pdf.getPage(self.signature_field.page_num - 1)
+
+            upperRight = page.cropBox.getUpperRight()
+
+            page_width = upperRight[0]
+            page_height = upperRight[1]
+
+            scaled_signature = self.scale(self.signature_field, page_width, page_height)
+
+            page.cropBox.lowerLeft = (scaled_signature.rectangle.left, page_height - scaled_signature.rectangle.top - scaled_signature.rectangle.height)
+            page.cropBox.upperRight = (scaled_signature.rectangle.left + scaled_signature.rectangle.width, page_height - scaled_signature.rectangle.top)
+
+            output = PdfFileWriter()
+            output.addPage(page)
+
+            file = open(pdf_file_path)
+            signature_file_path = os.path.join(os.path.dirname(file.name), 'signature.pdf')
+            with open(signature_file_path, 'wb') as fo:
+                output.write(fo)
+                return signature_file_path
 
     def extract_field_information(self):
         converted_fields = []
         with open(self.path_prodigy_labeled) as f:
-            dataList = json.load(f)
+            data = json.load(f)
 
             doc_name = data['text']
             page_width = data['width']
             page_height = data['height']
 
-                fields = data['fields']
+            fields = data['fields']
 
             for field in fields:
                 page = field['page']
@@ -86,7 +111,10 @@ class LabelMapper:
                                    page_height=page_height, label=field['label'], rectangle=rect)
                 converted_fields.append(converted_field)
 
-        return converted_fields
+            signature_rect = self.Rectangle(left=data['signature']['left'], top=data['signature']['top'], width=data['signature']['width'], height=data['signature']['height'])
+            signature_field = self.Field(filename=doc_name, page_num=data['signature']['page'], page_width=page_width,
+                                         page_height=page_height, label=field['label'], rectangle=signature_rect)
+        return converted_fields, signature_field
 
     def write_results(self, data_extracts):
         result = pd.DataFrame(data_extracts)
@@ -106,16 +134,19 @@ class LabelMapper:
             return dx * dy
         return -1
 
-    def scale(self, doc_width, doc_height):
+    def scale_annotations(self, doc_width, doc_height):
         result = []
         for annotation in self.fields:
-            factor_width = doc_width / annotation.page_width
-            factor_height = doc_height / annotation.page_height
-            scaled_rect = self.Rectangle(annotation.rectangle.left * factor_width,
-                                         annotation.rectangle.top * factor_height,
-                                         annotation.rectangle.width * factor_width,
-                                         annotation.rectangle.height * factor_height)
-            scaled = self.Field(annotation.filename, annotation.page_num, annotation.page_width, annotation.page_height,
-                                annotation.label, scaled_rect)
-            result.append(scaled)
+            result.append(self.scale(annotation, doc_width, doc_height))
         return result
+
+    def scale(self, field, doc_width, doc_height):
+        factor_width = doc_width / field.page_width
+        factor_height = doc_height / field.page_height
+        scaled_rect = self.Rectangle(field.rectangle.left * factor_width,
+                                     field.rectangle.top * factor_height,
+                                     field.rectangle.width * factor_width,
+                                     field.rectangle.height * factor_height)
+        scaled = self.Field(field.filename, field.page_num, field.page_width, field.page_height,
+                            field.label, scaled_rect)
+        return scaled

@@ -1,11 +1,11 @@
-[
-   {
-      "text": "kurzarbeit_voranmeldung_p-1",
-      "width": 1587,
-      "height": 2245,
-      "fields": [
+{
+   "text":"kurzarbeit_voranmeldung",
+   "width":1587,
+   "height":2245,
+   "fields":[
          {
             "label": "Address",
+            "page": 1,
             "left": 93,
             "top": 304,
             "width": 582,
@@ -13,6 +13,7 @@
          },
          {
             "label": "CorrespondenceAddress",
+            "page": 1,
             "left": 93,
             "top": 460,
             "width": 582,
@@ -20,6 +21,7 @@
          },
          {
             "label": "Industry",
+            "page": 1,
             "left": 325,
             "top": 638,
             "width": 350,
@@ -27,6 +29,7 @@
          },
          {
             "label": "Clerk",
+            "page": 1,
             "left": 325,
             "top": 718,
             "width": 350,
@@ -34,6 +37,7 @@
          },
          {
             "label": "Phone",
+            "page": 1,
             "left": 325,
             "top": 755,
             "width": 350,
@@ -41,6 +45,7 @@
          },
          {
             "label": "Email",
+            "page": 1,
             "left": 325,
             "top": 794,
             "width": 525,
@@ -48,6 +53,7 @@
          },
          {
             "label": "CantonalOffice",
+            "page": 1,
             "left": 848,
             "top": 595,
             "width": 584,
@@ -55,6 +61,7 @@
          },
          {
             "label": "P1CheckBoxShortTimeWorkFullCompany",
+            "page": 1,
             "left": 150,
             "top": 1025,
             "width": 60,
@@ -62,6 +69,7 @@
          },
          {
             "label": "P1Option1CheckBoxShortTimeWorkDepartment",
+            "page": 1,
             "left": 616,
             "top": 1025,
             "width": 60,
@@ -69,6 +77,7 @@
          },
          {
             "label": "P1ShortTimeWorkDepartment",
+            "page": 1,
             "left": 965,
             "top": 1025,
             "width": 470,
@@ -76,6 +85,7 @@
          },
          {
             "label": "P2Description",
+            "page": 1,
             "left": 150,
             "top": 1324,
             "width": 1286,
@@ -83,6 +93,7 @@
          },
          {
             "label": "P3TotalPersonal",
+            "page": 1,
             "left": 908,
             "top": 1625,
             "width": 176,
@@ -90,6 +101,7 @@
          },
          {
             "label": "P3Terminated",
+            "page": 1,
             "left": 1084,
             "top": 1625,
             "width": 176,
@@ -97,6 +109,7 @@
          },
          {
             "label": "P3ToBeTerminated",
+            "page": 1,
             "left": 1256,
             "top": 1625,
             "width": 176,
@@ -104,6 +117,7 @@
          },
          {
             "label": "P4NumberAffected",
+            "page": 1,
             "left": 732,
             "top": 1730,
             "width": 178,
@@ -111,6 +125,7 @@
          },
          {
             "label": "P5DurationFrom",
+            "page": 1,
             "left": 790,
             "top": 1795,
             "width": 294,
@@ -118,6 +133,7 @@
          },
          {
             "label": "P5DurationTo",
+            "page": 1,
             "left": 1140,
             "top": 1795,
             "width": 294,
@@ -125,6 +141,7 @@
          },
          {
             "label": "P6Percentage",
+            "page": 1,
             "left": 1256,
             "top": 1862,
             "width": 120,
@@ -132,6 +149,7 @@
          },
          {
             "label": "P7Insurance",
+            "page": 1,
             "left": 790,
             "top": 1925,
             "width": 640,
@@ -139,6 +157,7 @@
          },
          {
             "label": "P8Insurance",
+            "page": 1,
             "left": 790,
             "top": 2030,
             "width": 640,
@@ -146,20 +165,15 @@
          },
          {
             "label": "P8InsuranceNumber",
+            "page": 1,
             "left": 1140,
             "top": 2070,
             "width": 290,
             "height": 40
-         }
-      ]
-   },
-   {
-      "text": "kurzarbeit_voranmeldung_p-2",
-      "width": 1587,
-      "height": 2245,
-      "fields": [
+         },
          {
             "label": "PlaceAndDate",
+            "page": 2,
             "left": 90,
             "top": 1035,
             "width": 585,
@@ -167,11 +181,18 @@
          },
          {
             "label": "StampAndSignature",
+            "page": 2,
             "left": 730,
             "top": 1035,
             "width": 700,
             "height": 110
          }
-      ]
+   ],
+   "signature": {
+      "page": 2,
+      "left": 730,
+      "top": 980,
+      "width": 884,
+      "height": 280
    }
-]
+}

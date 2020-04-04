@@ -37,15 +37,16 @@ def upload_file():
 			filename = secure_filename(file.filename)
 			root_dir = os.path.join(app.config['UPLOAD_FOLDER'], Path(filename).stem)
 			os.makedirs(root_dir, exist_ok=True)
-			file.save(os.path.join(root_dir, filename))
+			file_path = os.path.join(root_dir, filename)
+			file.save(file_path)
 			flash('File successfully uploaded')
 			tsv_path = converter.convert_pdf(filename)
-			result = mapper.extract_and_write_result_for_document(tsv_path)
+			result, signature_file_path = mapper.extract_and_write_result_for_document(file_path, tsv_path)
 
-			return render_template('result.html', result=result)
+			return render_template('result.html', result=result, signature_file_path=signature_file_path)
 		else:
 			flash('Allowed file types are txt, pdf, png, jpg, jpeg, gif')
 			return redirect(request.url)
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=8000)
+    app.run(host='0.0.0.0', port=8080)
