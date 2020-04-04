@@ -1,28 +1,25 @@
-from app import app
-import re
 import collections
 import csv
-import os
 import json
-from loguru import logger
-import pandas as pd
+import os
+import re
 
-class LabelMapper():
+import pandas as pd
+from loguru import logger
+
+from flask_project import app
+
+
+class LabelMapper:
 
     def __init__(self):
-        self.path_prodigy_labeled = app.config['PATH_PRODIGY_LABELED']
-        self.output_root = app.config['UPLOAD_FOLDER']
+        self.path_prodigy_labeled = app.app.config['PATH_PRODIGY_LABELED']
+        self.output_root = app.app.config['UPLOAD_FOLDER']
 
         self.Rectangle = collections.namedtuple("Rectangle", "left top width height")
         self.Field = collections.namedtuple("Field", "filename page_num page_width page_height label rectangle")
 
         self.fields = self.extract_field_information()
-
-
-    def extract_for_all_docs(self):
-        documents = self.get_tsvs_to_extract()
-        extracted_data = self._extract_data_for_documents(documents)
-        self.write_results(extracted_data)
 
     def _extract_data_for_documents(self, documents):
         extracted_data = []
@@ -43,11 +40,9 @@ class LabelMapper():
 
         scaled_fields = self.scale(doc_width, doc_height)
 
-
         extract = {'filename': document}
         for field in scaled_fields:
             words = []
-            logger.info('Key: {}, {}'.format(field.label, field))
             for index, x in df.iterrows():
                 if x['page_num'] != field.page_num:
                     continue
@@ -61,27 +56,31 @@ class LabelMapper():
                 words.append(word)
 
             extract[field.label] = ' '.join(words)
+            logger.info('Label: {}, {}'.format(field.label, extract[field.label]))
+
         self.write_results([extract])
         return extract
 
     def extract_field_information(self):
         converted_fields = []
         with open(self.path_prodigy_labeled) as f:
-            data = json.load(f)
+            dataList = json.load(f)
 
-            m = re.search(r'(.*)_p-(\d+)', data['text'])
-            doc_name = m.group(1)
-            doc_page = int(m.group(2))
-            page_width = data['width']
-            page_height = data['height']
+            for data in dataList:
+                m = re.search(r'(.*)_p-(\d+)', data['text'])
+                doc_name = m.group(1)
+                doc_page = int(m.group(2))
+                page_width = data['width']
+                page_height = data['height']
 
-            fields = data['fields']
+                fields = data['fields']
 
-            for field in fields:
-                rect = self.Rectangle(left=field['left'], top=field['top'], width=field['width'], height=field['height'])
-                converted_field = self.Field(filename=doc_name, page_num=doc_page, page_width=page_width,
-                                   page_height=page_height, label=field['label'], rectangle=rect)
-                converted_fields.append(converted_field)
+                for field in fields:
+                    rect = self.Rectangle(left=field['left'], top=field['top'], width=field['width'],
+                                          height=field['height'])
+                    converted_field = self.Field(filename=doc_name, page_num=doc_page, page_width=page_width,
+                                                 page_height=page_height, label=field['label'], rectangle=rect)
+                    converted_fields.append(converted_field)
 
         return converted_fields
 
@@ -91,9 +90,8 @@ class LabelMapper():
         result.to_csv(os.path.join(self.output_root, 'extracted_values.csv'))
         result.to_excel(os.path.join(self.output_root, 'extracted_values.xlsx'))
 
-
     def area(self, a, b):  # returns None if rectangles don't intersect
-        a_xmax = a.left + b.width
+        a_xmax = a.left + a.width
         b_xmax = b.left + b.width
         a_ymax = a.top + a.height
         b_ymax = b.top + b.height
@@ -108,7 +106,11 @@ class LabelMapper():
         for annotation in self.fields:
             factor_width = doc_width / annotation.page_width
             factor_height = doc_height / annotation.page_height
-            scaled_rect = self.Rectangle(annotation.rectangle.left * factor_width, annotation.rectangle.top * factor_height, annotation.rectangle.width * factor_width, annotation.rectangle.height * factor_height)
-            scaled = self.Field(annotation.filename, annotation.page_num, annotation.page_width, annotation.page_height, annotation.label, scaled_rect)
+            scaled_rect = self.Rectangle(annotation.rectangle.left * factor_width,
+                                         annotation.rectangle.top * factor_height,
+                                         annotation.rectangle.width * factor_width,
+                                         annotation.rectangle.height * factor_height)
+            scaled = self.Field(annotation.filename, annotation.page_num, annotation.page_width, annotation.page_height,
+                                annotation.label, scaled_rect)
             result.append(scaled)
         return result
