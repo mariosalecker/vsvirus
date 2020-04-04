@@ -10,7 +10,6 @@ from pdf2image import convert_from_path
 from pytesseract import Output
 from wand.image import Image
 
-from flask_project import app
 
 os.environ['TESSDATA_PREFIX'] = os.path.join(app.app.root_path, 'tessdata')
 
