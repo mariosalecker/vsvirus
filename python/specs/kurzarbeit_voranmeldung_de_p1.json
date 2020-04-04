@@ -1,0 +1,14 @@
+{
+   "text":"kurzarbeit_voranmeldung_de_p-1",
+   "width":1587,
+   "height":2245,
+   "fields":[
+      {
+         "label":"Address",
+         "left": 93,
+         "top": 304,
+         "width": 582,
+         "height": 118 
+      }
+   ]
+}
