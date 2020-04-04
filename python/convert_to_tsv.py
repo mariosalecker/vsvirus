@@ -20,7 +20,7 @@ class Converter():
         self.files = self.get_files_from_data_dir()
         self.output_root = "./results"
         self.resolution = 200
-        for filename in tqdm(files):
+        for filename in tqdm(self.files):
             logger.info("Converting {}".format(filename))
             self.convert_pdf(filename)
 
