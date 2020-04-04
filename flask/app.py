@@ -1,6 +1,6 @@
 from flask import Flask
 
-UPLOAD_FOLDER = '/home/maorvelous/Documents/Lab/deepLearning/vsvirus'
+UPLOAD_FOLDER = './'
 
 app = Flask(__name__)
 app.secret_key = "secret key"
