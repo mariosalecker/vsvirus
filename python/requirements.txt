@@ -4,3 +4,5 @@ tqdm==4.45.0
 pdf2image==1.12.1
 wand==0.5.9
 loguru==0.4.1
+opencv-python==4.2.0.32
+openpyxl==3.0.3
