@@ -1,8 +1,8 @@
-
+from app import app
 import re
 import collections
 import csv
-import glob
+import os
 import json
 from loguru import logger
 import pandas as pd
@@ -10,7 +10,8 @@ import pandas as pd
 class LabelMapper():
 
     def __init__(self):
-        self.path_prodigy_labeled = 'specs/kurzarbeit_voranmeldung_de_p1.json'
+        self.path_prodigy_labeled = app.config['PATH_PRODIGY_LABELED']
+        self.output_root = app.config['UPLOAD_FOLDER']
 
         self.Rectangle = collections.namedtuple("Rectangle", "left top width height")
         self.Field = collections.namedtuple("Field", "filename page_num page_width page_height label rectangle")
@@ -26,12 +27,12 @@ class LabelMapper():
     def _extract_data_for_documents(self, documents):
         extracted_data = []
         for document in documents:
-            extracted_document_data = self._extract_data_for_document(document)
+            extracted_document_data = self.extract_and_write_result_for_document(document)
             extracted_data.append(extracted_document_data)
 
         return extracted_data
 
-    def _extract_data_for_document(self, document):
+    def extract_and_write_result_for_document(self, document):
         logger.info('Extracing document: {}'.format(document))
         df = pd.read_csv(document, sep='\t', error_bad_lines=False, quoting=csv.QUOTE_NONE, escapechar=None,
                          na_values='', encoding='utf-8')
@@ -60,10 +61,8 @@ class LabelMapper():
                 words.append(word)
 
             extract[field.label] = ' '.join(words)
+        self.write_results([extract])
         return extract
-
-    def get_tsvs_to_extract(self):
-        return glob.glob('./results/**/*.tsv')
 
     def extract_field_information(self):
         converted_fields = []
@@ -89,8 +88,8 @@ class LabelMapper():
     def write_results(self, data_extracts):
         result = pd.DataFrame(data_extracts)
 
-        result.to_csv('./results/extracted_values.csv')
-        result.to_excel('./results/extracted_values.xlsx')
+        result.to_csv(os.path.join(self.output_root, 'extracted_values.csv'))
+        result.to_excel(os.path.join(self.output_root, 'extracted_values.xlsx'))
 
 
     def area(self, a, b):  # returns None if rectangles don't intersect
@@ -113,6 +112,3 @@ class LabelMapper():
             scaled = self.Field(annotation.filename, annotation.page_num, annotation.page_width, annotation.page_height, annotation.label, scaled_rect)
             result.append(scaled)
         return result
-
-label_mapper = LabelMapper()
-label_mapper.extract_for_all_docs()
