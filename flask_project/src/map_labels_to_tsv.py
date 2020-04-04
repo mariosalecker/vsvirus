@@ -69,17 +69,16 @@ class LabelMapper():
         with open(self.path_prodigy_labeled) as f:
             data = json.load(f)
 
-            m = re.search(r'(.*)_p-(\d+)', data['text'])
-            doc_name = m.group(1)
-            doc_page = int(m.group(2))
+            doc_name = data['text']
             page_width = data['width']
             page_height = data['height']
 
             fields = data['fields']
 
             for field in fields:
+                page = field['page']
                 rect = self.Rectangle(left=field['left'], top=field['top'], width=field['width'], height=field['height'])
-                converted_field = self.Field(filename=doc_name, page_num=doc_page, page_width=page_width,
+                converted_field = self.Field(filename=doc_name, page_num=page, page_width=page_width,
                                    page_height=page_height, label=field['label'], rectangle=rect)
                 converted_fields.append(converted_field)
 

@@ -42,8 +42,6 @@ def upload_file():
 			result = mapper.extract_and_write_result_for_document(tsv_path)
 
 			return render_template('result.html', result=result)
-
-#			return render_template('result.html')
 		else:
 			flash('Allowed file types are txt, pdf, png, jpg, jpeg, gif')
 			return redirect(request.url)

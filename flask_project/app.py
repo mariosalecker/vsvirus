@@ -1,7 +1,7 @@
 from flask import Flask
 
 UPLOAD_FOLDER = './data'
-PATH_PRODIGY_LABELED = './src/specs/kurzarbeit_voranmeldung_de_p1.json'
+PATH_PRODIGY_LABELED = 'src/specs/kurzarbeit_voranmeldung_de_p.json'
 
 app = Flask(__name__)
 app.secret_key = "secret key"
