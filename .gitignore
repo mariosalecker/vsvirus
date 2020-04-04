@@ -1,2 +1,5 @@
 python/.vscode/launch.json
 python/.vscode/settings.json
+env
+.idea
+python/results/*
