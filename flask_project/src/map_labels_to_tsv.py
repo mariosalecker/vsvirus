@@ -7,7 +7,7 @@ import re
 import pandas as pd
 from loguru import logger
 
-from flask_project import app
+import app
 
 
 class LabelMapper:
