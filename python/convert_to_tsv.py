@@ -16,14 +16,16 @@ os.environ["TESSDATA_PREFIX"] = os.path.join(os.path.dirname(os.path.realpath(sy
 
 class Converter():
 
-    def __init__(self, files):
+    def __init__(self):
+        self.files = self.get_files_from_data_dir()
         self.output_root = "./results"
         self.resolution = 200
-
         for filename in tqdm(files):
             logger.info("Converting {}".format(filename))
             self.convert_pdf(filename)
 
+    def get_files_from_data_dir(self):
+        return glob.glob("./data/*.pdf")
 
     def convert_pdf(self, filename):
 
@@ -39,7 +41,6 @@ class Converter():
         result_tsv_path = self.create_tsv_results(result_dir_path, page_list_file_path)
 
         self.create_full_text_result(result_dir_path, result_tsv_path)
-
 
     def create_result_dir(self, filename):
         result_dir_path = os.path.join(self.output_root, Path(filename).stem)
@@ -93,8 +94,5 @@ class Converter():
         with open(out_txt, "w", encoding="utf8") as f:
             f.write(full_text)
 
-
-files=glob.glob("./data/*.pdf")
-
-Converter(files)
+Converter()
 
