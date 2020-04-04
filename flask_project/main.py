@@ -21,9 +21,8 @@ def allowed_file(filename):
 def upload_form():
 	return render_template('upload.html')
 
-@app.route('/', methods=['POST'])
+@app.route('/result', methods=['POST'])
 def upload_file():
-
 	if request.method == 'POST':
         # check if the post request has the file part
 		if 'file' not in request.files:
@@ -40,9 +39,11 @@ def upload_file():
 			file.save(os.path.join(root_dir, filename))
 			flash('File successfully uploaded')
 			tsv_path = converter.convert_pdf(filename)
-			mapper.extract_and_write_result_for_document(tsv_path)
+			result = mapper.extract_and_write_result_for_document(tsv_path)
 
-			return redirect('/')
+			return render_template('result.html', result=result)
+
+#			return render_template('result.html')
 		else:
 			flash('Allowed file types are txt, pdf, png, jpg, jpeg, gif')
 			return redirect(request.url)
