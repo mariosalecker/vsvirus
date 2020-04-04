@@ -7,6 +7,8 @@ import re
 import pandas as pd
 from loguru import logger
 
+import app
+
 
 class LabelMapper:
 
