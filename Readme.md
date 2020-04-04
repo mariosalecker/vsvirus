@@ -1,7 +1,7 @@
 
 ### Intro
 
-The corona virus is creating a lot of work for the goverments.
+The corona virus is creating a lot of work for the governments.
 Some of this work is processing all the forms related to the virus.
 
 The goal of this project is to reduce manual work for processing the forms and free up the time the
