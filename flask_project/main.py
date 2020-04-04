@@ -5,8 +5,8 @@ from flask import Flask, flash, request, redirect, render_template
 from werkzeug.utils import secure_filename
 from pathlib import Path
 
-from flask_project.src.convert_to_tsv import Converter
-from flask_project.src.map_labels_to_tsv import LabelMapper
+from src.convert_to_tsv import Converter
+from src.map_labels_to_tsv import LabelMapper
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
