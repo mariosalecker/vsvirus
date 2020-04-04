@@ -9,6 +9,13 @@
          "top": 304,
          "width": 582,
          "height": 118 
+      },
+      {
+         "label":"CorrespondenceAddress",
+         "left": 93,
+         "top": 460,
+         "width": 582,
+         "height": 76 
       }
    ]
 }

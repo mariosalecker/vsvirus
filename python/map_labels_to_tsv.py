@@ -48,6 +48,8 @@ class LabelMapper():
             words = []
             logger.info('Key: {}, {}'.format(field.label, field))
             for index, x in df.iterrows():
+                if x['page_num'] != field.page_num:
+                    continue
                 word_rect = self.Rectangle(x['left'], x['top'], x['width'], x['height'])
                 word = x['text']
                 conf = x['conf']
