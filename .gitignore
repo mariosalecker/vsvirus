@@ -1,7 +1,7 @@
-python/.vscode/launch.json
-python/.vscode/settings.json
+**/.vscode/*
 env
 .idea
-flask_project/data/*
-!**/__pycache__/
-**/__pycache__/
+python/results/*
+.vscode/settings.json
+**/*.pyc
+/flask_project/src/data/

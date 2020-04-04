@@ -1,21 +1,20 @@
-from app import app
-import pytesseract
-import sys
-import os
 import csv
 import glob
-import pandas as pd
-
-from pytesseract import Output
-from tqdm import tqdm
-from pdf2image import convert_from_path
-from loguru import logger
+import os
 from pathlib import Path
 
-os.environ['TESSDATA_PREFIX'] = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'tessdata')
+import pandas as pd
+import pytesseract
+from loguru import logger
+from pdf2image import convert_from_path
+from pytesseract import Output
+from wand.image import Image
+
+from app import app
+os.environ['TESSDATA_PREFIX'] = os.path.join("./", 'tessdata')
 
 
-class Converter():
+class Converter:
 
     def __init__(self):
         self.files = self.get_files_from_data_dir()
@@ -74,11 +73,15 @@ class Converter():
         file_path = os.path.join(result_dir_path, filename)
         images = convert_from_path(file_path, dpi=self.resolution)
 
-        result_file_paths=[]
+        result_file_paths = []
         for index, image in enumerate(images):
             result_file_path = os.path.join(result_dir_path, 'p-{:02d}.png'.format(index))
             result_file_paths.append(result_file_path)
             image.save(result_file_path)
+
+            with Image(filename=result_file_path) as img:
+                img.threshold(0.5)
+                img.save(filename=result_file_path)
         return result_file_paths
 
     def create_full_text_result(self, result_dir_path, result_tsv_path):

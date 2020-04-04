@@ -1,12 +1,13 @@
 import os
 import urllib.request
-from app import app
 from flask import Flask, flash, request, redirect, render_template
 from werkzeug.utils import secure_filename
 from pathlib import Path
 
-from flask_project.src.convert_to_tsv import Converter
-from flask_project.src.map_labels_to_tsv import LabelMapper
+from src.convert_to_tsv import Converter
+from src.map_labels_to_tsv import LabelMapper
+
+from app import app
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
@@ -47,4 +48,4 @@ def upload_file():
 			return redirect(request.url)
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0', port=8000)

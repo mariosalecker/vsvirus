@@ -1,17 +1,19 @@
-from app import app
 import re
 import collections
 import csv
 import os
 import json
-from loguru import logger
+import os
+import re
+
 import pandas as pd
 
-class LabelMapper():
+import app
+class LabelMapper:
 
     def __init__(self):
-        self.path_prodigy_labeled = app.config['PATH_PRODIGY_LABELED']
-        self.output_root = app.config['UPLOAD_FOLDER']
+        self.path_prodigy_labeled = app.app.config['PATH_PRODIGY_LABELED']
+        self.output_root = app.app.config['UPLOAD_FOLDER']
 
         self.Rectangle = collections.namedtuple("Rectangle", "left top width height")
         self.Field = collections.namedtuple("Field", "filename page_num page_width page_height label rectangle")
@@ -61,19 +63,21 @@ class LabelMapper():
                 words.append(word)
 
             extract[field.label] = ' '.join(words)
+            logger.info('Label: {}, {}'.format(field.label, extract[field.label]))
+
         self.write_results([extract])
         return extract
 
     def extract_field_information(self):
         converted_fields = []
         with open(self.path_prodigy_labeled) as f:
-            data = json.load(f)
+            dataList = json.load(f)
 
             doc_name = data['text']
             page_width = data['width']
             page_height = data['height']
 
-            fields = data['fields']
+                fields = data['fields']
 
             for field in fields:
                 page = field['page']
@@ -92,7 +96,7 @@ class LabelMapper():
 
 
     def area(self, a, b):  # returns None if rectangles don't intersect
-        a_xmax = a.left + b.width
+        a_xmax = a.left + a.width
         b_xmax = b.left + b.width
         a_ymax = a.top + a.height
         b_ymax = b.top + b.height
@@ -107,7 +111,11 @@ class LabelMapper():
         for annotation in self.fields:
             factor_width = doc_width / annotation.page_width
             factor_height = doc_height / annotation.page_height
-            scaled_rect = self.Rectangle(annotation.rectangle.left * factor_width, annotation.rectangle.top * factor_height, annotation.rectangle.width * factor_width, annotation.rectangle.height * factor_height)
-            scaled = self.Field(annotation.filename, annotation.page_num, annotation.page_width, annotation.page_height, annotation.label, scaled_rect)
+            scaled_rect = self.Rectangle(annotation.rectangle.left * factor_width,
+                                         annotation.rectangle.top * factor_height,
+                                         annotation.rectangle.width * factor_width,
+                                         annotation.rectangle.height * factor_height)
+            scaled = self.Field(annotation.filename, annotation.page_num, annotation.page_width, annotation.page_height,
+                                annotation.label, scaled_rect)
             result.append(scaled)
         return result

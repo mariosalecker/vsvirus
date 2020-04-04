@@ -1,16 +1,23 @@
 <html>
     <head>
-        <title>Python Flask File Upload Example</title>
+        <title>Digitize Form Processing to reduce government agency bottlenecks caused by Corona</title>
     </head>
     <body>
-		<title>Python Flask File Upload Example</title>
+    <title>Digitize Form Processing to reduce government agency bottlenecks caused by Corona</title>
 		<h2>Select a file to upload</h2>
-		{% for key, value in result.items() %}
-	        <div>
-				<p>
-					<b>{{ key }}</b>: {{ value }}</b>
-				</p>
-			</div>
+
+    <h2> Extracted Data from Uploaded Form </h2>
+    <table style="width:100%">
+        <tr>
+            <th>Form Key</th>
+            <th>Form Value</th>
+        </tr>
+        {% for key, value in result.items() %}
+            <tr>
+                <td>{{ key }}</td>
+                <td> {{ value }}</td>
+            </tr>
         {% endfor %}
+    </table>
     </body>
 </html>
