@@ -10,6 +10,8 @@ from flask_project.src.map_labels_to_tsv import LabelMapper
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
+converter = Converter()
+mapper = LabelMapper()
 
 
 def allowed_file(filename):
@@ -21,8 +23,7 @@ def upload_form():
 
 @app.route('/', methods=['POST'])
 def upload_file():
-	converter = Converter()
-	mapper = LabelMapper()
+
 	if request.method == 'POST':
         # check if the post request has the file part
 		if 'file' not in request.files:

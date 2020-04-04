@@ -1,4 +1,4 @@
-
+from app import app
 import re
 import collections
 import csv
