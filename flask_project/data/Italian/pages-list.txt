@@ -1,0 +1,2 @@
+/home/maorvelous/Documents/Lab/deepLearning/Hackathon/vsvirus/flask_project/./data/Italian/p-00.png
+/home/maorvelous/Documents/Lab/deepLearning/Hackathon/vsvirus/flask_project/./data/Italian/p-01.png

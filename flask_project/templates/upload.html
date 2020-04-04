@@ -1,24 +1,72 @@
 <!doctype html>
 <title>Digitize Form Processing to reduce government agency bottlenecks caused by Corona</title>
-<h2>Select a file to upload</h2>
-<p>
-	{% with messages = get_flashed_messages() %}
-	  {% if messages %}
-		<ul class=flashes>
-		{% for message in messages %}
-		  <li>{{ message }}</li>
-		{% endfor %}
-		</ul>
-	  {% endif %}
-	{% endwith %}
-</p>
-<form method="post" action="./result" enctype="multipart/form-data">
-    <dl>
-		<p>
-			<input type="file" name="file" autocomplete="off" required>
-		</p>
-    </dl>
-    <p>
-		<input type="submit" value="Submit">
-	</p>
-</form>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+<title>Digitize Form Processing to reduce government agency bottlenecks caused by Corona</title>
+
+<div class="jumbotron">
+	 <h1>APP NAME TBD</h1>
+	 <p>BLA BLA BLA BLA</p>
+ </div>
+
+ <div class="container">
+	 <div class="row">
+		 <div class="col-md-6">
+
+			<figure class="figure">
+				<img src="/static/sample.jpg" class="img-thumbnail" width="307" height="240" alt="...">
+				<figcaption class="figure-caption text-left">An Example of the form to submit </figcaption>
+			 <button type="button" class="btn btn-info btn-rounded" onclick=" window.open('http://www.arbeit.swiss/dam/secoalv/fr/dokumente/formulare/arbeitgeber/kae_covid_19/KAE-Abrechnung%20COVID-19%20d-f-i%20definitiv.xlsx.download.xlsx/KAE-Abrechnung%20COVID-19%20d-f-i%20definitiv.xlsx','_blank')">Download the Form</button>
+
+			</figure>
+
+		</div>
+		<div class="col-md-6">
+
+			<h2>Select the PDF scan of the Form to upload</h2>
+
+			<p>
+			 {% with messages = get_flashed_messages() %}
+				 {% if messages %}
+				 <ul class=flashes>
+				 {% for message in messages %}
+					 <li>{{ message }}</li>
+				 {% endfor %}
+				 </ul>
+				 {% endif %}
+			 {% endwith %}
+			</p>
+
+			<div class="card">
+				<h2>Select a file to upload</h2>
+ 			 <p>
+ 			 	{% with messages = get_flashed_messages() %}
+ 			 	  {% if messages %}
+ 			 		<ul class=flashes>
+ 			 		{% for message in messages %}
+ 			 		  <li>{{ message }}</li>
+ 			 		{% endfor %}
+ 			 		</ul>
+ 			 	  {% endif %}
+ 			 	{% endwith %}
+ 			 </p>
+
+				<div class="card-body">
+					<form method="post" action="./result" enctype="multipart/form-data">
+	  			     <dl>
+	  			 		<p>
+	  			 			<input type="file" name="file" autocomplete="off" required>
+	  			 		</p>
+	  			     </dl>
+	  			     <p>
+								 <button type="submit" class="btn btn-primary glyphicon glyphicon-star">
+	 	 			 		<i class="icon-user icon-white"></i> SUBMIT
+	 	 			 	</button>
+	  			 	</p>
+	  			 </form>
+		 </div>
+			</div>
+
+
+		</div>
+	</div>
+</div>
