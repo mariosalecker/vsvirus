@@ -24,5 +24,5 @@ conda env create -f environment.yml
 
 * start the application
 ```
-uvicorn main:app
+python main.py
 ```
