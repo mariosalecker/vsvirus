@@ -4,6 +4,8 @@ import csv
 from loguru import logger
 import json
 import os
+from pdf2image import convert_from_path
+import cv2
 
 import pandas as pd
 
@@ -33,7 +35,7 @@ class LabelMapper:
 
         return extracted_data
 
-    def extract_and_write_result_for_document(self, pdf_filename, tsv_document):
+    def extract_and_write_result_for_document(self, file_path, tsv_document):
         logger.info('Extracing document: {}'.format(tsv_document))
         df = pd.read_csv(tsv_document, sep='\t', error_bad_lines=False, quoting=csv.QUOTE_NONE, escapechar=None,
                          na_values='', encoding='utf-8')
@@ -63,35 +65,26 @@ class LabelMapper:
             extract[field.label] = ' '.join(words)
             logger.info('Label: {}, {}'.format(field.label, extract[field.label]))
 
-
-        signature_file_path = self.extract_and_save_signature(pdf_filename);
+        self.extract_and_save_signature(file_path);
         self.write_results([extract])
-        return extract, signature_file_path
+        return extract
 
     def extract_and_save_signature(self, pdf_file_path):
+        with open(pdf_file_path) as file:
 
-        with open(pdf_file_path, 'rb') as fin:
-            pdf = PdfFileReader(fin)
-            page = pdf.getPage(self.signature_field.page_num - 1)
+            signature_file_path = os.path.join(os.path.dirname(file.name), 'p-0' + str(self.signature_field.page_num - 1) + '.png')
 
-            upperRight = page.cropBox.getUpperRight()
+            image = cv2.imread(signature_file_path)
+            scaled_signature = self.scale(self.signature_field, image.shape[1], image.shape[0])
 
-            page_width = upperRight[0]
-            page_height = upperRight[1]
+            y = scaled_signature.rectangle.top
+            x = scaled_signature.rectangle.left
+            h = scaled_signature.rectangle.height
+            w = scaled_signature.rectangle.width
+            crop = image[int(y):int(y + h), int(x):int(x + w)]
 
-            scaled_signature = self.scale(self.signature_field, page_width, page_height)
-
-            page.cropBox.lowerLeft = (scaled_signature.rectangle.left, page_height - scaled_signature.rectangle.top - scaled_signature.rectangle.height)
-            page.cropBox.upperRight = (scaled_signature.rectangle.left + scaled_signature.rectangle.width, page_height - scaled_signature.rectangle.top)
-
-            output = PdfFileWriter()
-            output.addPage(page)
-
-            file = open(pdf_file_path)
-            signature_file_path = os.path.join(os.path.dirname(file.name), 'signature.pdf')
-            with open(signature_file_path, 'wb') as fo:
-                output.write(fo)
-                return signature_file_path
+            signature_file_path = os.path.join(os.path.dirname(file.name), 'signature.jpg')
+            cv2.imwrite(signature_file_path, crop,  [int(cv2.IMWRITE_JPEG_QUALITY), 100])
 
     def extract_field_information(self):
         converted_fields = []

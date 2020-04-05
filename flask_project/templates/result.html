@@ -27,5 +27,12 @@
     </tr>
       {% endfor %}
 
+    <tr>
+        <td class="border border-primary">Signature</td>
+        <td>
+            <img alt="" src="{{ url_for('get_signature_file', data_root=data_root) }}" style="width: 500px;"/>
+        </td>
+    </tr>
+
   </tbody>
 </table>

@@ -4,4 +4,6 @@ env
 python/results/*
 .vscode/settings.json
 **/*.pyc
-/flask_project/src/data/
+flask_project/data/*
+flask_project/data
+**/__pycache__
