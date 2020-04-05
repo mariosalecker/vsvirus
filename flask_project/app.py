@@ -2,7 +2,7 @@ import os
 
 from flask import Flask
 
-app = Flask(__name__, static_folder='data')
+app = Flask(__name__)
 app.secret_key = "secret key"
 
 UPLOAD_FOLDER = os.path.join(app.root_path, 'data')

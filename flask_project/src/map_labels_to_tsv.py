@@ -1,10 +1,8 @@
-from PyPDF2 import PdfFileWriter,PdfFileReader,PdfFileMerger
 import collections
 import csv
 from loguru import logger
 import json
 import os
-from pdf2image import convert_from_path
 import cv2
 
 import pandas as pd
@@ -46,7 +44,7 @@ class LabelMapper:
 
         scaled_fields = self.scale_annotations(doc_width, doc_height)
 
-        extract = {'filename': tsv_document}
+        extract = {'filename': os.path.basename(file_path)}
         for field in scaled_fields:
             words = []
             logger.info('Key: {}, {}'.format(field.label, field))
