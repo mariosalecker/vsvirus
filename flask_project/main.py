@@ -16,8 +16,9 @@ mapper = LabelMapper()
 
 
 def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
+    if filename.endswith('.pdf'):
+        return True
+    return False
 
 @app.route('/')
 def upload_form():
@@ -41,14 +42,13 @@ def upload_file():
             os.makedirs(root_dir, exist_ok=True)
             file_path = os.path.join(root_dir, filename)
             file.save(file_path)
-            flash('File successfully uploaded')
             tsv_path = converter.convert_pdf(filename)
             result = mapper.extract_and_write_result_for_document(file_path, tsv_path)
 
             return render_template('result.html', result=result, data_root=Path(filename).stem)
         else:
-            flash('Allowed file types are txt, pdf, png, jpg, jpeg, gif')
-            return redirect(request.url)
+            flash('Allowed file types is pdf only')
+            return render_template('result.html', result={}, data_root='')
 
 
 @app.route("/get_signature_file/<data_root>")
