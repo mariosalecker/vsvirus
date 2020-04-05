@@ -24,9 +24,7 @@ class Converter:
     def get_files_from_data_dir(self):
         return glob.glob('./data/*.pdf')
 
-    def convert_pdf(self, filename):
-
-        result_dir_path = self.create_result_dir(filename)
+    def convert_pdf(self, result_dir_path, filename):
 
         result_file = self.get_result_file(result_dir_path)
         if result_file:

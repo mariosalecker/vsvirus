@@ -3,6 +3,7 @@ from flask import send_from_directory
 from flask import Flask, flash, request, redirect, render_template
 from werkzeug.utils import secure_filename
 from pathlib import Path
+import datetime
 
 from src.convert_to_tsv import Converter
 from src.map_labels_to_tsv import LabelMapper
@@ -38,11 +39,12 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            root_dir = os.path.join(app.config['UPLOAD_FOLDER'], Path(filename).stem)
+            folder_name = str(datetime.datetime.now().timestamp()) + "_" + Path(filename).stem
+            root_dir = os.path.join(app.config['UPLOAD_FOLDER'], folder_name)
             os.makedirs(root_dir, exist_ok=True)
             file_path = os.path.join(root_dir, filename)
             file.save(file_path)
-            tsv_path = converter.convert_pdf(filename)
+            tsv_path = converter.convert_pdf(root_dir, filename)
             result = mapper.extract_and_write_result_for_document(file_path, tsv_path)
 
             return render_template('result.html', result=result, data_root=Path(filename).stem)
