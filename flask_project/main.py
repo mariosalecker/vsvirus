@@ -47,7 +47,7 @@ def upload_file():
             tsv_path = converter.convert_pdf(root_dir, filename)
             result = mapper.extract_and_write_result_for_document(file_path, tsv_path)
 
-            return render_template('result.html', result=result, data_root=Path(filename).stem)
+            return render_template('result.html', result=result, data_root=folder_name)
         else:
             flash('Allowed file types is pdf only')
             return render_template('result.html', result={}, data_root='')
