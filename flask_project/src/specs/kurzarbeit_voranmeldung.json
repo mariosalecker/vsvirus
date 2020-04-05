@@ -178,17 +178,10 @@
             "top": 1035,
             "width": 585,
             "height": 110
-         },
-         {
-            "label": "StampAndSignature",
-            "page": 2,
-            "left": 730,
-            "top": 1035,
-            "width": 700,
-            "height": 110
          }
    ],
    "signature": {
+      "label": "StampAndSignature",
       "page": 2,
       "left": 730,
       "top": 980,

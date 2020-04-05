@@ -1,31 +1,66 @@
 <html>
+
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <head>
-        <title>Digitize Form Processing to reduce government agency bottlenecks caused by Corona</title>
-    </head>
-    <body>
 
-		<title>Python Flask File Upload Example</title>
-		<h2>Parsed File : </h2>
+<head>
+    <title>Digitize Form Processing to reduce government agency bottlenecks caused by Corona</title>
+</head>
 
-    <table class="table table-striped">
-  <thead class="thead-dark">
-    <tr>
+<body>
 
-      <th scope="col">KEY</th>
-      <th scope="col">VALUE</th>
+    <title>Python Flask File Upload Example</title>
+    <div class="container">
 
-    </tr>
-  </thead>
-  <tbody>
-      {% for key, value in result.items() %}
-    <tr>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="row" style="margin-top: 100px;">
+                <div class="col">
+                    {% for message in messages %}
 
-      <td class="border border-primary">{{ key }}</td>
-      <td>{{ value }}</td>
+                        <div class="alert alert-danger">
+                          <strong>Warning!</strong>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <h2>Parsed File : </h2>
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
 
-    </tr>
-      {% endfor %}
+                        <th scope="col">KEY</th>
+                        <th scope="col">VALUE</th>
 
-  </tbody>
-</table>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for key, value in result.items() %}
+                    <tr>
+
+                        <td class="border border-primary">{{ key }}</td>
+                        <td>{{ value }}</td>
+
+                    </tr>
+                    {% endfor %}
+
+                    <tr>
+                        <td class="border border-primary">StampAndSignature</td>
+                        <td>
+                            <img alt="" src="{{ url_for('get_signature_file', data_root=data_root) }}" style="width: 500px;" />
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+        {% endif %}
+        {% endwith %}
+        {% block body %}
+        {% endblock %}
+    </div>
+
+</body>
+
+</html>
