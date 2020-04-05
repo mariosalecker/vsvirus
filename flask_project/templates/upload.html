@@ -1,87 +1,117 @@
 <!doctype html>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+      integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
 <title>Digitize Form Processing to reduce government agency bottlenecks caused by Corona</title>
 
 
 <div class="jumbotron">
-	 <h1>The FORM RELIEVER - Free up time for Swiss authorities</h1>
+    <h1>The FORM RELIEVER - Free up time for Swiss authorities</h1>
 
-    <p>The 2019–20 coronavirus pandemic is creating a lot of problems, not only for the health systems, but for the whole society.<br>
-        Many institutions like government agencies are working to their limits to be able to keep the society up and running.</p>
+    <p>The 2019–20 coronavirus pandemic is creating a lot of problems, not only for the health systems, but for the
+        whole society.<br>
+        Many institutions like government agencies are working to their limits to be able to keep the society up and
+        running.</p>
 
-    <p>This MVP was implemented as part of the #versusvirus Hackathon. It can help the government agencies to process forms faster and free up their time for more important work.<br>
-    The scope was the automatic extraction of the COVID-19 pre-registration form for short-time work in PDF format.
+    <p>This MVP was implemented as part of the #versusvirus Hackathon. It can help the government agencies to process
+        forms faster and free up their time for more important work.<br>
+        The scope was the automatic extraction of the COVID-19 pre-registration form for short-time work in PDF format.
     </p>
     <p>It can easily be extended to extract information from other forms as well.</p>
- </div>
 
- <div class="container">
-	 <div class="row">
-		 <div class="col-md-6">
-
-			<figure class="figure">
-				<img src="/static/sample.jpg" class="img-thumbnail" width="307" height="240" alt="...">
-				<figcaption class="figure-caption text-left">An Example of the form to submit </figcaption>
-
-
-			</figure>
-			 <h3>Download the form containing all languages</h3>
-			 <button type="button" class="btn btn-info btn-rounded" onclick=" window.open('http://www.arbeit.swiss/dam/secoalv/fr/dokumente/formulare/arbeitgeber/kae_covid_19/KAE-Abrechnung%20COVID-19%20d-f-i%20definitiv.xlsx.download.xlsx/KAE-Abrechnung%20COVID-19%20d-f-i%20definitiv.xlsx','_blank')">Download the Form</button>
-
-			 <h3>Download pre-filled examples</h3>
-			 <button type="button" class="btn btn-info btn-rounded" onclick=" window.open('static/German.pdf')">German example</button>
-			 <button type="button" class="btn btn-info btn-rounded" onclick=" window.open('static/Italian.pdf')">Italian example</button>
-			 <button type="button" class="btn btn-info btn-rounded" onclick=" window.open('static/French.pdf')">French example</button>
-
-		</div>
-		<div class="col-md-6">
-
-			<h2>Select the PDF scan of the Form to upload</h2>
-
-			<p>
-			 {% with messages = get_flashed_messages() %}
-				 {% if messages %}
-				 <ul class=flashes>
-				 {% for message in messages %}
-					 <li>{{ message }}</li>
-				 {% endfor %}
-				 </ul>
-				 {% endif %}
-			 {% endwith %}
-			</p>
-
-			<div class="card">
-{#				<h2>Select a file to upload</h2>#}
- 			 <p>
- 			 	{% with messages = get_flashed_messages() %}
- 			 	  {% if messages %}
- 			 		<ul class=flashes>
- 			 		{% for message in messages %}
- 			 		  <li>{{ message }}</li>
- 			 		{% endfor %}
- 			 		</ul>
- 			 	  {% endif %}
- 			 	{% endwith %}
- 			 </p>
-
-				<div class="card-body">
-					<form method="post" action="./result" enctype="multipart/form-data">
-	  			     <dl>
-	  			 		<p>
-	  			 			<input type="file" name="file" autocomplete="off" required>
-	  			 		</p>
-	  			     </dl>
-	  			     <p>
-								 <button type="submit" class="btn btn-primary glyphicon glyphicon-star">
-	 	 			 		<i class="icon-user icon-white"></i> SUBMIT
-	 	 			 	</button>
-	  			 	</p>
-	  			 </form>
-		 </div>
-			</div>
-
-
-		</div>
-	</div>
 </div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+
+            <figure class="figure">
+                <img src="/static/sample.jpg" class="img-thumbnail" width="307" height="240" alt="...">
+                <figcaption class="figure-caption text-left">An Example of the form to submit</figcaption>
+
+
+            </figure>
+            <h3>Download the form containing all languages</h3>
+            <button type="button" class="btn btn-info btn-rounded"
+                    onclick=" window.open('http://www.arbeit.swiss/dam/secoalv/fr/dokumente/formulare/arbeitgeber/kae_covid_19/KAE-Abrechnung%20COVID-19%20d-f-i%20definitiv.xlsx.download.xlsx/KAE-Abrechnung%20COVID-19%20d-f-i%20definitiv.xlsx','_blank')">
+                Download the Form
+            </button>
+
+            <h3>Download pre-filled examples</h3>
+            <button type="button" class="btn btn-info btn-rounded" onclick=" window.open('static/German.pdf')">German
+                example
+            </button>
+            <button type="button" class="btn btn-info btn-rounded" onclick=" window.open('static/Italian.pdf')">Italian
+                example
+            </button>
+            <button type="button" class="btn btn-info btn-rounded" onclick=" window.open('static/French.pdf')">French
+                example
+            </button>
+
+        </div>
+        <div class="col-md-6">
+
+            <h2>Select the PDF scan of the Form to upload</h2>
+
+            <p>
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class=flashes>
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+            </p>
+
+            <div class="card">
+                {#				<h2>Select a file to upload</h2>#}
+                <p>
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <ul class=flashes>
+                                {% for message in messages %}
+                                    <li>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    {% endwith %}
+                </p>
+
+                <div class="card-body">
+                    <form method="post" action="./result" enctype="multipart/form-data">
+                        <dl>
+                            <p>
+                                <input type="file" name="file" autocomplete="off" required>
+                            </p>
+                        </dl>
+                        <p>
+                            <button type="submit" class="btn btn-primary glyphicon glyphicon-star">
+                                <i class="icon-user icon-white"></i> SUBMIT
+                            </button>
+                        </p>
+                    </form>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="page-footer font-small">
+    <div class="container">
+        <div class="row mt-3">
+            <ul class="list-inline mx-auto">
+                <li class="list-inline-item">Team:</li>
+                <li class="list-inline-item">Arlind Noraj</li>
+                <li class="list-inline-item">Fabio Sulser</li>
+                <li class="list-inline-item">Marco Maggiotti</li>
+                <li class="list-inline-item">Mario Salecker</li>
+                <li class="list-inline-item">Priya Pimol</li>
+            </ul>
+        </div>
+
+    </div>
+</footer>
